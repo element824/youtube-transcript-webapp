@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Transcript Fetcher</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #transcript { width: 100%; height: 300px; margin-top: 20px; }
+        input[type=text] { width: 60%; padding: 8px; }
+        button { padding: 8px 16px; }
+        .error { color: red; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>YouTube Transcript Fetcher</h2>
+    <input type="text" id="yturl" placeholder="Enter YouTube URL here">
+    <button onclick="fetchTranscript()">Get Transcript</button>
+    <div class="error" id="error"></div>
+    <textarea id="transcript" readonly placeholder="Transcript will appear here..."></textarea>
+    <script>
+        function fetchTranscript() {
+            const url = document.getElementById('yturl').value;
+            document.getElementById('error').textContent = '';
+            document.getElementById('transcript').value = '';
+            fetch('/transcript', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            })
+            .then(res => res.json().then(data => ({ status: res.status, body: data })))
+            .then(({ status, body }) => {
+                if (status === 200) {
+                    document.getElementById('transcript').value = body.transcript;
+                } else {
+                    document.getElementById('error').textContent = body.error || 'Unknown error';
+                }
+            })
+            .catch(() => {
+                document.getElementById('error').textContent = 'Network error';
+            });
+        }
+    </script>
+</body>
+</html>
