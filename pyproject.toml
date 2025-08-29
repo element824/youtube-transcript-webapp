@@ -1,0 +1,12 @@
+[project]
+name = "yt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.2",
+    "load-dotenv>=0.1.0",
+    "openai>=1.102.0",
+    "youtube-transcript-api>=1.2.2",
+]
